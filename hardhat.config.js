@@ -10,13 +10,12 @@ module.exports = {
     },
   },
   networks: {
-    hardhat: { chainId: 1337 }
-    // hardhat: {},
-    // polygon_mumbai: {
-    //   url: process.env.POLYGON_MUMBAI_URL,
-    //   accounts:[
-    //     `0x${process.env.PRIVATE_KEY_METAMASK_ACCOUNT}`,
-    //   ],
-    // }
+    hardhat: { chainId: 1337 },
+    sepolia: {
+      url: process.env.NEXT_PUBLIC_RPC_URL || "",
+      accounts: process.env.PRIVATE_KEY
+        ? [`0x${process.env.PRIVATE_KEY.replace(/^0x/, "")}`]
+        : [],
+    },
   }
 };

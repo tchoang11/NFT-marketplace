@@ -10,6 +10,10 @@ const FormData = require("form-data");
 const JWT_IMAGE_API = `Bearer ${process.env.NEXT_PUBLIC_PINATA_JWT_IMAGE}`;
 const JWT_META_API = `Bearer ${process.env.NEXT_PUBLIC_PINATA_JWT_META}`;
 
+// Read-only RPC for fetching on-chain data. Falls back to the local Hardhat
+// node (http://127.0.0.1:8545) when NEXT_PUBLIC_RPC_URL is not set.
+const READ_RPC_URL = process.env.NEXT_PUBLIC_RPC_URL || undefined;
+
 // INTERNAL IMPORT 
 import { NFTMarketplaceAddress, NFTMarketplaceABI } from './constants';
 
@@ -273,7 +277,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
     //---FETCHNFTS FUNCTION
     const fetchNFTs = async () => {
         try {
-            const provider = new ethers.JsonRpcProvider();
+            const provider = new ethers.JsonRpcProvider(READ_RPC_URL);
             const contract = fetchContract(provider);
 
             const data = await contract.fetchMarketItems();
@@ -356,7 +360,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
     const fetchAllAuctionNFTs = async () => {
         try {
-            const provider = new ethers.JsonRpcProvider();
+            const provider = new ethers.JsonRpcProvider(READ_RPC_URL);
             const contract = fetchContract(provider);
 
             const data = await contract.fetchAllAuctionItems();
@@ -403,7 +407,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
     const fetchMyAuctionNFTs = async () => {
         try {
-            const provider = new ethers.JsonRpcProvider();
+            const provider = new ethers.JsonRpcProvider(READ_RPC_URL);
             const contract = fetchContract(provider);
 
             const data = await contract.fetchMyAuctionItems();

@@ -12,11 +12,11 @@ A full-stack NFT marketplace where users can mint, list, buy, sell, and auction 
 
 ## Tech stack
 
-| Layer | Technologies |
-|-------|-------------|
-| Frontend | Next.js 12, React 18, MUI, Ant Design, Framer Motion |
+| Layer      | Technologies                                                   |
+| ---------- | -------------------------------------------------------------- |
+| Frontend   | Next.js 12, React 18, MUI, Ant Design, Framer Motion           |
 | Blockchain | Solidity 0.8.24, Hardhat, OpenZeppelin (ERC-721), ethers.js v6 |
-| Storage | IPFS via Pinata |
+| Storage    | IPFS via Pinata                                                |
 
 ## Prerequisites
 
@@ -43,6 +43,10 @@ cp .env.example .env
 ```env
 NEXT_PUBLIC_PINATA_JWT_IMAGE=your_pinata_jwt_here
 NEXT_PUBLIC_PINATA_JWT_META=your_pinata_jwt_here
+
+# Optional: leave empty to use the local Hardhat node.
+# Set to a Sepolia RPC URL to read from the live testnet contract.
+NEXT_PUBLIC_RPC_URL=
 ```
 
 Get the tokens from Pinata → **API Keys** → **New Key**.
@@ -73,7 +77,7 @@ npx hardhat node
 npx hardhat run scripts/deploy.js --network localhost
 ```
 
-The default deployed address is `0x5FbDB2315678afecb367f032d93F642f64180aa3`, which is already set in [`Context/constants.js`](Context/constants.js). If your deployment prints a different address, update it there.
+[`Context/constants.js`](Context/constants.js) is currently set to the live **Sepolia** deployment. To run fully against your local node instead, copy the address printed by this command into `NFTMarketplaceAddress` there.
 
 ### 6. Run the app
 
@@ -92,16 +96,35 @@ Open [http://localhost:3000](http://localhost:3000).
 
 Import one of the test accounts printed by `npx hardhat node` (using its private key) to get test ETH.
 
+## Deploying to a public testnet (Sepolia)
+
+To make the app usable by anyone (not just on your machine), deploy the contract to the Sepolia testnet.
+
+Add these to your `.env`:
+
+```env
+NEXT_PUBLIC_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/your_key   # Alchemy/Infura RPC
+PRIVATE_KEY=your_deployer_wallet_private_key                        # a throwaway test wallet
+```
+
+Fund the deployer wallet with test ETH from a [Sepolia faucet](https://cloud.google.com/application/web3/faucet/ethereum/sepolia), then deploy:
+
+```bash
+npx hardhat run scripts/deploy.js --network sepolia
+```
+
+Copy the printed address into `NFTMarketplaceAddress` in [`Context/constants.js`](Context/constants.js).
+
+> `PRIVATE_KEY` is used only for deployment and is never exposed to the browser. Never commit `.env` or use a wallet holding real funds.
+
 ## Deploying the frontend (Vercel)
 
-The frontend can be deployed to [Vercel](https://vercel.com):
-
 1. Push this repo to GitHub.
-2. In Vercel, **Add New → Project** and import the repo (framework auto-detected as Next.js).
-3. Under **Settings → Environment Variables**, add `NEXT_PUBLIC_PINATA_JWT_IMAGE` and `NEXT_PUBLIC_PINATA_JWT_META`.
+2. In [Vercel](https://vercel.com), **Add New → Project** and import the repo (auto-detected as Next.js).
+3. Under **Settings → Environment Variables**, add `NEXT_PUBLIC_PINATA_JWT_IMAGE`, `NEXT_PUBLIC_PINATA_JWT_META`, and `NEXT_PUBLIC_RPC_URL` (do **not** add `PRIVATE_KEY`).
 4. Deploy.
 
-> **Note:** The deployed frontend shows the full UI, but blockchain interactions (mint / buy / auction) require the smart contract to be deployed on a public network the visitor's wallet can reach. As configured, the contract runs on a local Hardhat node, so on-chain actions work only when running everything locally. To make the live demo fully interactive, deploy the contract to a public testnet (e.g. Sepolia) and update the address and RPC accordingly.
+With the contract on Sepolia and `NEXT_PUBLIC_RPC_URL` set, the deployed site is fully interactive — connect MetaMask (switched to Sepolia) to mint, buy, and bid.
 
 ## Project structure
 
