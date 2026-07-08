@@ -7,6 +7,7 @@
 
 # testing
 /coverage
+/coverage.json
 
 # next.js
 /.next/
@@ -25,7 +26,8 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# local env files
+# env files
+.env
 .env*.local
 
 # vercel
@@ -35,9 +37,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-node_modules
-.env
-
 # Hardhat files
 /cache
 /artifacts
@@ -46,57 +45,8 @@ node_modules
 /typechain
 /typechain-types
 
-# solidity-coverage files
-/coverage
-/coverage.json
-
-node_modules
-.env
-
-# Hardhat files
-/cache
-/artifacts
-
-# TypeChain files
-/typechain
-/typechain-types
-
-# solidity-coverage files
-/coverage
-/coverage.json
-
-node_modules
-.env
-
-# Hardhat files
-/cache
-/artifacts
-
-# TypeChain files
-/typechain
-/typechain-types
-
-# solidity-coverage files
-/coverage
-/coverage.json
-
-node_modules
-.env
-
-# Hardhat files
-/cache
-/artifacts
-
-# TypeChain files
-/typechain
-/typechain-types
-
-# solidity-coverage files
-/coverage
-/coverage.json
-
-#localTesting
+# local testing / editor
 /localTesting
 .idea
 
-/Context/NFTMarketplace.json
+.claude/
